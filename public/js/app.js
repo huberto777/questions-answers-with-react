@@ -39577,7 +39577,7 @@ function (_Component) {
       e.preventDefault();
       if (!_this.props.auth) return alert("zaloguj się");
 
-      _this.setState(function (prevState, props) {
+      _this.setState(function (prevState) {
         return {
           isBest: !prevState.isBest
         };
@@ -39615,8 +39615,7 @@ function (_Component) {
     });
 
     _this.state = {
-      isBest: props.isBest // id: props.answer.id
-
+      isBest: props.isBest
     }; // console.log(this.state.id);
 
     return _this;

@@ -1,22 +1,37 @@
-import React from "react";
+import React, { Component } from "react";
 
-const EditAnswer = props => {
-    return (
-        <>
-            <form onSubmit={props.updateAnswer}>
+class EditAnswer extends Component {
+    state = {
+        body: this.props.body,
+    };
+    handleBody = (e) => {
+        this.setState({
+            body: e.target.value,
+        });
+    };
+    update = () => {
+        const { body } = this.state;
+        const { id, updateAnswer } = this.props;
+        if (body.length < 3) return;
+        updateAnswer(id, { id, body });
+    };
+    render() {
+        return (
+            <>
                 <div className="form-group">
                     <textarea
                         className="form-control"
                         rows="7"
                         type="text"
-                        name="updateAnswer"
-                        defaultValue={props.body}
+                        value={this.state.body}
+                        onChange={this.handleBody}
                     ></textarea>
                 </div>
                 <div className="form-group">
                     <button
                         type="submit"
                         className="btn btn-block btn-outline-primary"
+                        onClick={this.update}
                     >
                         update
                     </button>
@@ -27,9 +42,9 @@ const EditAnswer = props => {
                         cancel
                     </button>
                 </div>
-            </form>
-        </>
-    );
-};
+            </>
+        );
+    }
+}
 
 export default EditAnswer;

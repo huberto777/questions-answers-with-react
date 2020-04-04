@@ -2,24 +2,22 @@ import React from "react";
 import Author from "../Author";
 import VoteAnswerItem from "./VoteAnswerItem";
 import AcceptAnswerItem from "./AcceptAnswerItem";
-import EditAnswer from "./EditAnswer";
 
-const AnswerItem = props => {
-    const { auth, answer, name, isVoted, isBest, votesCount, editMode } = props;
+const AnswerItem = ({ auth, answer, name, isVoted, isBest, votesCount }) => {
     // console.log(answer.user.id);
     const handleButtons = () => {
         if (auth.id === answer.user.id) {
             return (
                 <>
                     <button
-                        onClick={() => props.editAnswer(answer.id, answer.body)}
+                        onClick={props.editAnswer}
                         className="btn btn-sm mr-1 btn-outline-primary"
                     >
                         <i className="far fa-edit"></i>
                     </button>
                     <button
                         className="btn btn-sm btn-outline-danger"
-                        onClick={() => props.delete(answer.id)}
+                        onClick={props.delete}
                     >
                         <i className="far fa-trash-alt"></i>
                     </button>

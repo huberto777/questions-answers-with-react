@@ -12,61 +12,49 @@ class AnswerList extends React.Component {
             edit: false,
             count: JSON.parse(props.count),
             question: JSON.parse(props.question),
-            id: null
         };
-        this.handleEditAnswer = this.handleEditAnswer.bind(this);
         // console.log(this.state.answers[0]);
         // console.log(this.state.answers[0].is_best);
         // console.log(this.state.answers);
         // console.log(this.state.auth.avatar);
     }
 
-    handleEditAnswer() {
-        // console.log(arguments);
-        this.setState({
-            edit: !this.state.edit,
-            id: arguments[0],
-            body: arguments[1]
-        });
-    }
-
-    updateAnswer = e => {
-        e.preventDefault();
-        // console.log(event.target.updateAnswer.value);
-        if (e.target.updateAnswer.value < 3) return;
-        this.setState({
-            answers: this.state.answers.map(answer => {
-                if (answer.id === this.state.id) {
-                    answer.excerpt = e.target.updateAnswer.value;
-                    // console.log(answer);
-                }
-                return answer;
-            }),
-            edit: false
-        });
-        Axios.put(
-            `/questions/${this.state.question.slug}/answers/${this.state.id}`,
-            {
-                body: e.target.updateAnswer.value
-            }
-        )
-            .then(res => res.data)
-            .catch(err => console.log(err));
+    handleEditAnswer = ({ id, body }) => {
+        this.setState((prevState) => ({
+            edit: !prevState.edit,
+            id,
+            body,
+        }));
     };
 
-    handleDeleteAnswer = id => {
+    updateAnswer = (id, updatedAnswer) => {
+        this.setState((prevState) => ({
+            answers: prevState.answers.map((answer) =>
+                answer.id === id ? updatedAnswer : answer
+            ),
+            edit: false,
+        }));
+        Axios.put(
+            `/questions/${this.state.question.slug}/answers/${this.state.id}`,
+            { body }
+        )
+            .then((res) => res.data)
+            .catch((err) => console.log(err));
+    };
+
+    handleDeleteAnswer = (id) => {
         const answers = [...this.state.answers];
-        const index = answers.findIndex(answer => answer.id === id);
+        const index = answers.findIndex((answer) => answer.id === id);
         answers.splice(index, 1);
-        this.setState({
+        this.setState((prevState) => ({
             answers,
-            count: this.state.count - 1
-        });
+            count: prevState.count - 1,
+        }));
         if (!this.state.auth) return alert("zaloguj się");
 
         Axios.delete(`/questions/${this.state.question.slug}/answers/${id}`)
-            .then(res => res.data)
-            .catch(error => console.log(error));
+            .then((res) => res.data)
+            .catch((error) => console.log(error));
     };
 
     createButton() {
@@ -92,36 +80,38 @@ class AnswerList extends React.Component {
         return (
             <>
                 {this.state.edit ? (
-                    <>
-                        <EditAnswer
-                            editAnswer={this.handleEditAnswer}
-                            body={this.state.body}
-                            updateAnswer={this.updateAnswer}
-                        />
-                    </>
-                ) : (
-                    this.createButton()
-                )}
-                <div className="card-title">
-                    <h3>
-                        {count} {name}s
-                    </h3>
-                </div>
-                <hr />
-
-                {answers.map(answer => (
-                    <AnswerItem
-                        key={answer.id}
-                        answer={answer}
-                        auth={auth}
-                        name={name}
-                        isVoted={answer.is_voted}
-                        isBest={answer.is_best}
-                        votesCount={answer.votes_count}
-                        delete={this.handleDeleteAnswer}
+                    <EditAnswer
                         editAnswer={this.handleEditAnswer}
+                        id={this.state.id}
+                        body={this.state.body}
+                        updateAnswer={this.updateAnswer}
                     />
-                ))}
+                ) : (
+                    <>
+                        {this.createButton()}
+                        <div className="card-title">
+                            <h3>
+                                {count} {name}s
+                            </h3>
+                        </div>
+                        <hr />
+                        {answers.map((answer) => (
+                            <AnswerItem
+                                key={answer.id}
+                                answer={answer}
+                                auth={auth}
+                                name={name}
+                                isVoted={answer.is_voted}
+                                isBest={answer.is_best}
+                                votesCount={answer.votes_count}
+                                delete={() =>
+                                    this.handleDeleteAnswer(answer.id)
+                                }
+                                editAnswer={() => this.handleEditAnswer(answer)}
+                            />
+                        ))}
+                    </>
+                )}
             </>
         );
     }

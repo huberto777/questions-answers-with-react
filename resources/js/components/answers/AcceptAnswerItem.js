@@ -6,7 +6,6 @@ class AcceptAnswerItem extends Component {
         super(props);
         this.state = {
             isBest: props.isBest
-            // id: props.answer.id
         };
         // console.log(this.state.id);
     }
@@ -14,7 +13,7 @@ class AcceptAnswerItem extends Component {
     handleAccept = e => {
         e.preventDefault();
         if (!this.props.auth) return alert("zaloguj się");
-        this.setState((prevState, props) => ({
+        this.setState(prevState => ({
             isBest: !prevState.isBest
         }));
         axios
