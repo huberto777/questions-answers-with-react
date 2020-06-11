@@ -1,7 +1,7 @@
 import React from "react";
 
-const Author = props => {
-    const { created_date, user } = props.answer;
+const Author = ({ answer }) => {
+    const { created_date, user } = answer;
     // console.log(props.answer);
     return (
         <>

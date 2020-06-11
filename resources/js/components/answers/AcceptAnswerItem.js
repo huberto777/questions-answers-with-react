@@ -5,16 +5,14 @@ class AcceptAnswerItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isBest: props.isBest
+            answer: props.answer
         };
-        // console.log(this.state.id);
     }
 
     handleAccept = e => {
-        e.preventDefault();
         if (!this.props.auth) return alert("zaloguj się");
         this.setState(prevState => ({
-            isBest: !prevState.isBest
+            answer: !prevState.answer.isBest
         }));
         axios
             .post(`/answers/${this.props.answer.id}/accept`)
@@ -23,7 +21,7 @@ class AcceptAnswerItem extends Component {
     };
     renderView = () => {
         let classes = "";
-        const { isBest } = this.state;
+        const { isBest } = this.state.answer;
         if (isBest) classes += "vote-accepted";
         if (isBest) {
             return (
@@ -32,7 +30,7 @@ class AcceptAnswerItem extends Component {
                     className={classes}
                     onClick={this.handleAccept}
                 >
-                    <i className="fas fa-check fa-2x"></i>
+                    <i className="fas fa-check fa-2x" />
                 </a>
             );
         } else {
@@ -42,7 +40,7 @@ class AcceptAnswerItem extends Component {
                     className={classes}
                     onClick={this.handleAccept}
                 >
-                    <i className="fas fa-check fa-2x"></i>
+                    <i className="fas fa-check fa-2x" />
                 </a>
             );
         }

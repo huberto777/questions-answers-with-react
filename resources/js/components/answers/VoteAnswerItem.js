@@ -7,33 +7,33 @@ class VoteAnswerItem extends Component {
         super(props);
         this.state = {
             active: props.isVoted,
-            votesCount: props.votesCount
+            votesCount: props.votesCount,
         };
         // console.log(this.state.answer);
     }
-    handleVoteUp = e => {
+    handleVoteUp = (e) => {
         e.preventDefault();
         if (!this.props.auth) return alert("zaloguj się");
-        this.setState({
-            active: !this.state.active,
-            votesCount: this.state.votesCount + 1
-        });
+        this.setState((prevState) => ({
+            active: !prevState.active,
+            votesCount: prevState.votesCount + 1,
+        }));
         axios
             .post(`/vote/${this.props.answer.id}/Answer`)
-            .then(res => res.data)
-            .catch(err => console.log(err));
+            .then((res) => res.data)
+            .catch((err) => console.log(err));
     };
-    handleVoteDown = e => {
+    handleVoteDown = (e) => {
         e.preventDefault();
         if (!this.props.auth) return alert("zaloguj się");
-        this.setState({
-            active: !this.state.active,
-            votesCount: this.state.votesCount - 1
-        });
+        this.setState((prevState) => ({
+            active: !prevState.active,
+            votesCount: prevState.votesCount - 1,
+        }));
         axios
             .delete(`/unvote/${this.props.answer.id}/Answer`)
-            .then(res => res.data)
-            .catch(err => console.log(err));
+            .then((res) => res.data)
+            .catch((err) => console.log(err));
     };
     render() {
         const { active, votesCount } = this.state;

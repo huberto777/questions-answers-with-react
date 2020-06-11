@@ -2,18 +2,18 @@ import React, { Component } from "react";
 
 class EditAnswer extends Component {
     state = {
-        body: this.props.body,
+        body: this.props.answer.body
     };
-    handleBody = (e) => {
+    handleBody = e => {
         this.setState({
-            body: e.target.value,
+            body: e.target.value
         });
     };
     update = () => {
         const { body } = this.state;
-        const { id, updateAnswer } = this.props;
+        const { answer, onUpdate } = this.props;
         if (body.length < 3) return;
-        updateAnswer(id, { id, body });
+        onUpdate({ ...answer, body });
     };
     render() {
         return (
@@ -25,7 +25,7 @@ class EditAnswer extends Component {
                         type="text"
                         value={this.state.body}
                         onChange={this.handleBody}
-                    ></textarea>
+                    />
                 </div>
                 <div className="form-group">
                     <button
@@ -36,7 +36,7 @@ class EditAnswer extends Component {
                         update
                     </button>
                     <button
-                        onClick={props.editAnswer}
+                        onClick={this.props.onCancel}
                         className="btn btn-block btn-outline-danger"
                     >
                         cancel
